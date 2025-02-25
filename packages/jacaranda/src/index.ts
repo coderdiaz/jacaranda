@@ -40,15 +40,18 @@
 //   }
 // });
 
-import { ImageStyle, TextStyle, ViewStyle, DimensionValue } from 'react-native';
+import { ImageStyle, TextStyle, ViewStyle, StyleProp } from 'react-native';
 
-type TokenString = `$${string}`;
+// Define a type that removes token strings from style properties
+type ResolvedStyle = ViewStyle & TextStyle & ImageStyle;
 
-export type StyleObject = Partial<{
-  [K in keyof (ViewStyle & TextStyle & ImageStyle)]: 
-    | (ViewStyle & TextStyle & ImageStyle)[K]
-    | (K extends keyof ViewStyle ? TokenString | DimensionValue : TokenString);
-}>;
+// StyleObject now extends ResolvedStyle
+type StyleObject = {
+  [K in keyof ResolvedStyle]?: 
+    | ResolvedStyle[K] 
+    | (string extends ResolvedStyle[K] ? `$${string}` : never)
+    | (number extends ResolvedStyle[K] ? `$${string}` : never);
+};
 
 // Define the VariantOptions type to ensure type safety in variant definitions
 type VariantOptions<V> = {
@@ -98,7 +101,7 @@ export function styles<V extends VariantOptions<V>>(config: VariantStyleConfig<V
   type DefaultProps = NonNullable<typeof config.defaultVariants>;
   type Props = OptionalIfHasDefault<VariantProps, DefaultProps>;
 
-  return (props?: Props) => {
+  return (props?: Props): StyleProp<ResolvedStyle> => {
     // Start with base styles
     let styles: StyleObject = {
       ...(config.base || {}),
@@ -140,7 +143,7 @@ export function styles<V extends VariantOptions<V>>(config: VariantStyleConfig<V
       }
     }
 
-    return styles;
+    return styles as StyleProp<ResolvedStyle>;
   };
 }
 
@@ -154,8 +157,6 @@ interface AllowedTokenCategories {
   fontSizes: number;
   fonts: string;
   lineHeight: number;
-  borderWidth: number;
-  borderStyles: 'solid' | 'dashed' | 'dotted' | 'none';
 }
 
 // Update TokenConfig to only allow specific categories
