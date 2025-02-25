@@ -47,10 +47,10 @@ type ResolvedStyle = ViewStyle & TextStyle & ImageStyle;
 
 // StyleObject now extends ResolvedStyle
 type StyleObject = {
-  [K in keyof ResolvedStyle]?: 
-    | ResolvedStyle[K] 
-    | (string extends ResolvedStyle[K] ? `$${string}` : never)
-    | (number extends ResolvedStyle[K] ? `$${string}` : never);
+  [K in keyof ResolvedStyle]?:
+  | ResolvedStyle[K]
+  | (string extends ResolvedStyle[K] ? `$${string}` : never)
+  | (number extends ResolvedStyle[K] ? `$${string}` : never);
 };
 
 // Define the VariantOptions type to ensure type safety in variant definitions
@@ -154,7 +154,7 @@ export function styles<V extends VariantOptions<V>>(config: VariantStyleConfig<V
 interface AllowedTokenCategories {
   colors: string;
   spacing: number;
-  fontSizes: number;
+  fontSize: number;
   fonts: string;
   lineHeight: number;
 }
@@ -178,7 +178,7 @@ function resolveTokens(style: StyleObject, tokens: TokenConfig): StyleObject {
 
     const tokenPath = value.slice(1).split('.');
     const [category, token] = tokenPath;
-    
+
     const tokenValue = tokens[category as keyof TokenConfig]?.[token];
     if (tokenValue !== undefined) {
       acc[key] = tokenValue;
