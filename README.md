@@ -1,6 +1,6 @@
-## SVA
+## Jacaranda
 
-SVA (Style Variant API) provides a way to define styles in React Native with better experience and composability. The key featuare is the ability to create multi-variants styles with a type-safe definition inspired by [Stitches](https://stitches.dev/docs/variants) and [CVA](https://cva.style/docs/getting-started/variants) (for React apps)
+Provides a way to styling components in React Native with better experience and composability. The key feature is the ability to create multi-variants styles with a type-safe definition inspired by [Stitches](https://stitches.dev/docs/variants) and [CVA](https://cva.style/docs/getting-started/variants) (for React apps).
 
 #### Currently properties:
 
@@ -19,7 +19,7 @@ SVA (Style Variant API) provides a way to define styles in React Native with bet
 ### Example of usage
 
 ```tsx
-import { styles } from 'sva';
+import { styles } from 'jacaranda';
 
 // With React Native screens
 export const Button = () => {
@@ -55,3 +55,5 @@ const buttonStyles = styles({
   },
 });
 ```
+
+Copyright @ 2025 by Javier Diaz
