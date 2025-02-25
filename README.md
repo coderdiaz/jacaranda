@@ -25,7 +25,7 @@ To configure `Jacaranda`, create a `jacaranda.config.ts` file (`.js` works too) 
 import { createTokens } from 'jacaranda';
 ```
 
-This function receives an object with the design tokens and returns a `styles` object that you can use to style your components.
+This function receives an object with the design tokens.
 - `colors`: Define your colors.
 - `fontSize`: Define your font sizes.
 - `spacing`: Define your spacing.
