@@ -1,0 +1,69 @@
+{
+  "name": "sva",
+  "description": "A style variant API for React Native",
+  "version": "0.0.1-beta.0",
+  "license": "ISC",
+  "author": {
+    "name": "Javier Diaz Chamorro",
+    "email": "hey@coderdiaz.com",
+    "url": "https://coderdiaz.com"
+  },
+  "scripts": {
+    "build": "pnpm run '/^build:.*/'",
+    "build:cjs": "swc ./src/index.ts --config-file ./.swcrc -o dist/index.js -C module.type=commonjs",
+    "build:esm": "swc ./src/index.ts --config-file ./.swcrc -o dist/index.js -C module.type=es6",
+    "build:tsc": "tsc --project tsconfig.build.json",
+    "check": "tsc --project tsconfig.json --noEmit",
+    "prepublishOnly": "pnpm build"
+  },
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://github.com/coderdiaz/sva#readme",
+  "bugs": "https://github.com/coderdiaz/sva/issues",
+  "repository": "https://github.com/coderdiaz/sva.git",
+  "devDependencies": {
+    "@swc/cli": "0.3.12",
+    "@swc/core": "1.4.16",
+    "react-native": "^0.76.0"
+  },
+  "peerDependencies": {
+    "react-native": "*",
+    "typescript": ">=4.5.5"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
+  },
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "types": "./src/index.ts"
+    },
+    "./types": {
+      "types": "./src/types.ts"
+    }
+  },
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
+  "publishConfig": {
+    "exports": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "main": "dist/index.js",
+    "module": "dist/index.mjs",
+    "types": "dist/index.d.ts"
+  },
+  "keywords": [
+    "sva",
+    "style-variant-api",
+    "stitches",
+    "react-native",
+    "css",
+    "variants"
+  ]
+}
