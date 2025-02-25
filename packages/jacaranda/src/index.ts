@@ -40,10 +40,15 @@
 //   }
 // });
 
-import { ImageStyle, TextStyle, ViewStyle } from 'react-native';
+import { ImageStyle, TextStyle, ViewStyle, DimensionValue } from 'react-native';
 
-// Types for variant styles
-type StyleObject = ViewStyle | TextStyle | ImageStyle;
+type TokenString = `$${string}`;
+
+export type StyleObject = Partial<{
+  [K in keyof (ViewStyle & TextStyle & ImageStyle)]: 
+    | (ViewStyle & TextStyle & ImageStyle)[K]
+    | (K extends keyof ViewStyle ? TokenString | DimensionValue : TokenString);
+}>;
 
 // Define the VariantOptions type to ensure type safety in variant definitions
 type VariantOptions<V> = {
@@ -138,3 +143,7 @@ export function styles<V extends VariantOptions<V>>(config: VariantStyleConfig<V
     return styles;
   };
 }
+
+// Add these types above the existing types
+
+export { createTokens } from './tokens';
