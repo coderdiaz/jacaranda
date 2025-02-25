@@ -18,9 +18,24 @@ Provides a way to styling components in React Native with better experience and 
 - [x] Support to define theme tokens.
 - [ ] Styles based on conditions.
 
-### Example of usage
+### Create your config file
+To configure `Jacaranda`, create a `jacaranda.config.ts` file (`.js` works too) to define your reusable design tokens and import the `createTokens` function.
+```tsx
+// jacaranda.config.ts
+import { createTokens } from 'jacaranda';
+```
 
-```tsx jacaranda.ts
+This function receives an object with the design tokens and returns a `styles` object that you can use to style your components.
+- `colors`: Define your colors.
+- `fontSize`: Define your font sizes.
+- `spacing`: Define your spacing.
+- `fonts`: Define your fonts.
+- `lineHeight`: Define your line heights.
+
+And returns a `styles` function that you can use to style your components.
+
+```tsx 
+// jacaranda.config.ts
 import { createTokens } from 'jacaranda';
 
 export const { styles } = createTokens({
@@ -33,7 +48,6 @@ export const { styles } = createTokens({
     primary500: '#06b6d4',
     primary600: '#0e93d1',
     primary700: '#1570ad',
-    // Secondary
     secondary50: '#ecfdf5',
     secondary100: '#d9f9eb',
     secondary200: '#bbfde8',
@@ -53,14 +67,23 @@ export const { styles } = createTokens({
   },
 })
 ```
+### Import and use it
+
+After the tokens are defined, you can use the design tokens in your components. You'll be importing the `styles` function from the `jacaranda.config.ts` file.
 
 ```tsx
-import { styles } from './jacaranda';
+// Button.tsx
+import { TouchableOpacity } from 'react-native';
+import { type VariantProps } from 'jacaranda';
+import { styles } from './jacaranda.config';
 
-// Button primitive
-export const Button = () => {
+type ButtonProps = VariantProps<typeof buttonStyles> & {
+  children?: React.ReactNode;
+};
+
+export const Button = (props: ButtonProps) => {
   return (
-    <TouchableOpacity style={buttonStyles()}>
+    <TouchableOpacity style={buttonStyles(props)}>
       <Text>Click me</Text>
     </TouchableOpacity>
   );
@@ -90,6 +113,17 @@ const buttonStyles = styles({
     size: 'md',
   },
 });
+```
+
+### TypeScript
+#### Extract variants from a component
+
+You can use the `VariantProps` type to extract the variants from a component.
+
+```tsx
+import { type VariantProps } from 'jacaranda';
+
+type ButtonProps = VariantProps<typeof buttonStyles>;
 ```
 
 Copyright @ 2025 by Javier Diaz
