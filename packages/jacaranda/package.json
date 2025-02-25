@@ -1,6 +1,6 @@
 {
-  "name": "sva",
-  "description": "A style variant API for React Native",
+  "name": "jacaranda",
+  "description": "A lightweight styling library for React Native",
   "version": "0.0.1-beta.0",
   "license": "ISC",
   "author": {
@@ -61,9 +61,20 @@
   "keywords": [
     "sva",
     "style-variant-api",
+    "jacaranda",
     "stitches",
     "react-native",
     "css",
-    "variants"
+    "variants",
+    "styling",
+    "vanilla-extract",
+    "css",
+    "css-in-js",
+    "javascript",
+    "style",
+    "styles",
+    "stylesheet",
+    "stylsheets",
+    "design-system"
   ]
 }
