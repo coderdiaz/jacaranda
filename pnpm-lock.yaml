@@ -54,6 +54,9 @@ importers:
       expo-status-bar:
         specifier: ~2.0.1
         version: 2.0.1(react-native@0.76.7(@babel/core@7.26.9)(@babel/preset-env@7.26.9(@babel/core@7.26.9))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
+      jacaranda:
+        specifier: workspace:0.1.0-beta.0
+        version: link:../jacaranda
       react:
         specifier: 18.3.1
         version: 18.3.1

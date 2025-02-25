@@ -4,6 +4,7 @@
     "build": "pnpm run --filter './packages/**' build",
     "check": "pnpm run --filter './packages/**' --parallel check",
     "ios": "pnpm run --filter './packages/app' ios",
+    "ios-typescript": "pnpm run --filter './packages/app-typescript' ios",
     "test": "vitest run --coverage"
   },
   "devDependencies": {
