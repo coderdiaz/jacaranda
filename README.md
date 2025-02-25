@@ -1,4 +1,4 @@
-## Jacaranda
+## 🌸 Jacaranda
 
 > ⚠️ **BETA SOFTWARE**: This library is in active development and not yet recommended for production use. APIs may change without notice. Feel free to try it out and provide feedback!
 
