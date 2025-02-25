@@ -1,5 +1,7 @@
 ## Jacaranda
 
+> ⚠️ **BETA SOFTWARE**: This library is in active development and not yet recommended for production use. APIs may change without notice. Feel free to try it out and provide feedback!
+
 Provides a way to styling components in React Native with better experience and composability. The key feature is the ability to create multi-variants styles with a type-safe definition inspired by [Stitches](https://stitches.dev/docs/variants) and [CVA](https://cva.style/docs/getting-started/variants) (for React apps).
 
 #### Currently properties:
@@ -13,15 +15,49 @@ Provides a way to styling components in React Native with better experience and 
 
 - [x] Variants definition.
 - [x] Default variants.
+- [x] Support to define theme tokens.
 - [ ] Styles based on conditions.
-- [ ] Support to define theme tokens.
 
 ### Example of usage
 
-```tsx
-import { styles } from 'jacaranda';
+```tsx jacaranda.ts
+import { createTokens } from 'jacaranda';
 
-// With React Native screens
+export const { styles } = createTokens({
+  colors: {
+    primary50: '#ecfeff',
+    primary100: '#cffafe',
+    primary200: '#a5f3fc',
+    primary300: '#67e8f9',
+    primary400: '#22d3ee',
+    primary500: '#06b6d4',
+    primary600: '#0e93d1',
+    primary700: '#1570ad',
+    // Secondary
+    secondary50: '#ecfdf5',
+    secondary100: '#d9f9eb',
+    secondary200: '#bbfde8',
+    secondary300: '#86f9d9',
+    secondary400: '#0d9488',
+    secondary500: '#027a7b',
+    secondary600: '#016464',
+    secondary700: '#014747',
+  },
+  fontSize: {
+    xs: 4,
+    sm: 8,
+    md: 16,
+    lg: 24,
+    xl: 32,
+    xxl: 40,
+  },
+})
+```
+
+```tsx
+import { styles } from './jacaranda';
+
+// Button primitive
 export const Button = () => {
   return (
     <TouchableOpacity style={buttonStyles()}>
@@ -37,10 +73,10 @@ const buttonStyles = styles({
   variants: {
     intent: {
       primary: {
-        backgroundColor: '#32275F',
+        backgroundColor: '$colors.primary50',
       },
       secondary: {
-        backgroundColor: '#D9D9D9',
+        backgroundColor: '$colors.secondary50',
       },
     },
     size: {
