@@ -15,8 +15,9 @@ Provides a way to styling components in React Native with better experience and 
 
 - [x] Variants definition.
 - [x] Default variants.
-- [x] Support to define theme tokens.
+- [x] Support to define design tokens.
 - [ ] Styles based on conditions.
+- [ ] Default design tokens.
 
 ### Create your config file
 To configure `Jacaranda`, create a `jacaranda.config.ts` file (`.js` works too) to define your reusable design tokens and import the `createTokens` function.
