@@ -3,6 +3,7 @@
   "scripts": {
     "build": "pnpm run --filter './packages/**' build",
     "check": "pnpm run --filter './packages/**' --parallel check",
+    "ios": "pnpm run --filter './packages/app' ios",
     "test": "vitest run --coverage"
   },
   "devDependencies": {
