@@ -1,0 +1,22 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "pnpm run --filter './packages/**' build",
+    "check": "pnpm run --filter './packages/**' --parallel check",
+    "test": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "3.0.7",
+    "prettier": "3.5.2",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.7"
+  },
+  "engines": {
+    "node": ">=18.x.x"
+  },
+  "pnpm": {
+    "overrides": {
+      "sva": "workspace:*"
+    }
+  }
+}
