@@ -20,7 +20,7 @@
   "packageManager": "pnpm@10.4.1",
   "pnpm": {
     "overrides": {
-      "sva": "workspace:*"
+      "jacaranda": "workspace:*"
     }
   }
 }
