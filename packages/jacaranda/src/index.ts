@@ -164,7 +164,8 @@ type TokenConfig = {
 };
 
 interface CreateTokensReturn {
-  styles: typeof styles;
+  sva: typeof styles;
+  tokens: TokenConfig;
 }
 
 // Helper to resolve token references in style objects
@@ -197,10 +198,10 @@ export function defineTokens<T extends TokenConfig>(tokenConfig: T): CreateToken
       ...acc,
       [category]: values,
     };
-  }, {} as any);
+  }, {} as TokenConfig);
 
   // Create a wrapped styles function that resolves token references
-  const wrappedStyles: typeof styles = (config: any) => {
+  const sva: typeof styles = (config: any) => {
     // Resolve tokens in base styles
     const resolvedBase = config.base ? resolveTokens(config.base, tokens) : config.base;
 
@@ -236,6 +237,7 @@ export function defineTokens<T extends TokenConfig>(tokenConfig: T): CreateToken
   };
 
   return {
-    styles: wrappedStyles,
+    sva,
+    tokens,
   };
 }
