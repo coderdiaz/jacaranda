@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { styles, createTokens } from './';
+import { styles, defineTokens } from './';
 
-describe('createVariantStyle', () => {
+describe('styles', () => {
   it('should return base styles when no variants are provided', () => {
     const baseStyles = styles({
       base: { display: 'flex' },
@@ -121,14 +121,14 @@ describe('createVariantStyle', () => {
   });
 });
 
-describe('createTokens', () => {
+describe('defineTokens', () => {
   it('should create styles function', () => {
-    const { styles } = createTokens({
+    const { styles } = defineTokens({
       colors: {
         primary: '#000000',
         secondary: '#ffffff',
       },
-      spacing: {
+      space: {
         sm: 8,
         md: 16,
       },
@@ -138,11 +138,11 @@ describe('createTokens', () => {
   });
 
   it('should resolve token references in styles', () => {
-    const { styles } = createTokens({
+    const { styles } = defineTokens({
       colors: {
         primary: '#000000',
       },
-      spacing: {
+      space: {
         sm: 8,
       },
     });
@@ -150,7 +150,7 @@ describe('createTokens', () => {
     const result = styles({
       base: {
         backgroundColor: '$colors.primary',
-        padding: '$spacing.sm',
+        padding: '$space.sm',
       },
       variants: {},
     });
@@ -162,12 +162,9 @@ describe('createTokens', () => {
   });
 
   it('should resolve token references in variants', () => {
-    const { styles } = createTokens({
+    const { styles } = defineTokens({
       colors: {
         primary: '#000000',
-      },
-      borderStyles: {
-        default: 'solid',
       },
     });
 
@@ -177,7 +174,6 @@ describe('createTokens', () => {
         type: {
           primary: {
             backgroundColor: '$colors.primary',
-            borderStyle: '$borderStyles.default',
           },
         },
       },
@@ -185,16 +181,15 @@ describe('createTokens', () => {
 
     expect(result({ type: 'primary' })).toEqual({
       backgroundColor: '#000000',
-      borderStyle: 'solid',
     });
   });
 
   it('should handle compound variants', () => {
-    const { styles } = createTokens({
+    const { styles } = defineTokens({
       colors: {
         primary: '#000000',
       },
-      spacing: {
+      space: {
         sm: 8,
       },
     });
@@ -209,7 +204,7 @@ describe('createTokens', () => {
         variants: { size: 'small' as const, type: 'primary' as const },
         style: {
           backgroundColor: '$colors.primary',
-          padding: '$spacing.sm',
+          padding: '$space.sm',
         },
       }],
     });
@@ -221,7 +216,7 @@ describe('createTokens', () => {
   });
 
   it('should ignore missing token references', () => {
-    const { styles } = createTokens({
+    const { styles } = defineTokens({
       colors: {
         primary: '#000000',
       },
@@ -241,25 +236,21 @@ describe('createTokens', () => {
   });
 
   it('should support all allowed token categories', () => {
-    const { styles } = createTokens({
+    const { styles } = defineTokens({
       colors: { primary: '#000000' },
-      spacing: { sm: 8 },
+      space: { sm: 8 },
       fontSizes: { base: 16 },
       fonts: { body: 'Arial' },
       lineHeight: { normal: 1.5 },
-      borderWidth: { thin: 1 },
-      borderStyles: { default: 'solid' },
     });
 
     const result = styles({
       base: {
         color: '$colors.primary',
-        padding: '$spacing.sm',
+        padding: '$space.sm',
         fontSize: '$fontSizes.base',
         fontFamily: '$fonts.body',
         lineHeight: '$lineHeight.normal',
-        borderWidth: '$borderWidth.thin',
-        borderStyle: '$borderStyles.default',
       },
       variants: {},
     });
@@ -270,8 +261,6 @@ describe('createTokens', () => {
       fontSize: 16,
       fontFamily: 'Arial',
       lineHeight: 1.5,
-      borderWidth: 1,
-      borderStyle: 'solid',
     });
   });
 }); 

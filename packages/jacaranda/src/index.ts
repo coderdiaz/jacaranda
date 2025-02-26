@@ -34,7 +34,7 @@
 //       style: { fontWeight: 'bold' },
 //     },
 //   ],
-//   default: {
+//   defaultVariants: {
 //     visual: 'solid',
 //     size: 'sm',
 //   }
@@ -153,7 +153,7 @@ export function styles<V extends VariantOptions<V>>(config: VariantStyleConfig<V
 // Define allowed token categories and their value types
 interface AllowedTokenCategories {
   colors: string;
-  spacing: number;
+  space: number;
   fontSize: number;
   fonts: string;
   lineHeight: number;
@@ -191,7 +191,7 @@ function resolveTokens(style: StyleObject, tokens: TokenConfig): StyleObject {
 /**
  * Creates a token system and returns the styles function
  */
-export function createTokens<T extends TokenConfig>(tokenConfig: T): CreateTokensReturn {
+export function defineTokens<T extends TokenConfig>(tokenConfig: T): CreateTokensReturn {
   // Create the tokens object
   const tokens = Object.entries(tokenConfig).reduce((acc, [category, values]) => {
     return {
