@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { styles, defineTokens } from './';
 
-describe('styles', () => {
+describe('sva', () => {
   it('should return base styles when no variants are provided', () => {
     const baseStyles = styles({
       base: { display: 'flex' },
@@ -123,7 +123,7 @@ describe('styles', () => {
 
 describe('defineTokens', () => {
   it('should create styles function', () => {
-    const { styles } = defineTokens({
+    const { sva } = defineTokens({
       colors: {
         primary: '#000000',
         secondary: '#ffffff',
@@ -134,11 +134,11 @@ describe('defineTokens', () => {
       },
     });
 
-    expect(typeof styles).toBe('function');
+    expect(typeof sva).toBe('function');
   });
 
   it('should resolve token references in styles', () => {
-    const { styles } = defineTokens({
+    const { sva } = defineTokens({
       colors: {
         primary: '#000000',
       },
@@ -147,7 +147,7 @@ describe('defineTokens', () => {
       },
     });
 
-    const result = styles({
+    const result = sva({
       base: {
         backgroundColor: '$colors.primary',
         padding: '$space.sm',
@@ -162,13 +162,13 @@ describe('defineTokens', () => {
   });
 
   it('should resolve token references in variants', () => {
-    const { styles } = defineTokens({
+    const { sva } = defineTokens({
       colors: {
         primary: '#000000',
       },
     });
 
-    const result = styles({
+    const result = sva({
       base: {},
       variants: {
         type: {
@@ -185,7 +185,7 @@ describe('defineTokens', () => {
   });
 
   it('should handle compound variants', () => {
-    const { styles } = defineTokens({
+    const { sva } = defineTokens({
       colors: {
         primary: '#000000',
       },
@@ -194,7 +194,7 @@ describe('defineTokens', () => {
       },
     });
 
-    const result = styles({
+    const result = sva({
       base: {},
       variants: {
         size: { small: {} },
@@ -218,13 +218,13 @@ describe('defineTokens', () => {
   });
 
   it('should ignore missing token references', () => {
-    const { styles } = defineTokens({
+    const { sva } = defineTokens({
       colors: {
         primary: '#000000',
       },
     });
 
-    const result = styles({
+    const result = sva({
       base: {
         backgroundColor: '$colors.nonexistent',
         color: '$colors.primary',
@@ -238,7 +238,7 @@ describe('defineTokens', () => {
   });
 
   it('should support all allowed token categories', () => {
-    const { styles } = defineTokens({
+    const { sva } = defineTokens({
       colors: { primary: '#000000' },
       space: { sm: 8 },
       fontSizes: { base: 16 },
@@ -246,7 +246,7 @@ describe('defineTokens', () => {
       lineHeight: { normal: 1.5 },
     });
 
-    const result = styles({
+    const result = sva({
       base: {
         color: '$colors.primary',
         padding: '$space.sm',
