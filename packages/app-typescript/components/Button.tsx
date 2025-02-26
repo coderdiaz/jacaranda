@@ -1,7 +1,7 @@
 import { TouchableOpacity } from 'react-native';
 import { type VariantProps } from 'jacaranda';
 import { Typography } from './Typography';
-import { styles } from '../jacaranda.config';
+import { sva } from '../jacaranda.config';
 
 type ButtonProps = VariantProps<typeof buttonStyles> & {
   children?: React.ReactNode;
@@ -15,11 +15,11 @@ export const Button = (props: ButtonProps) => {
   );
 };
 
-const buttonStyles = styles({
+const buttonStyles = sva({
   base: {
-    paddingHorizontal: '$spacing.8',
-    paddingVertical: '$spacing.3',
-    borderRadius: '$spacing.2',
+    paddingHorizontal: '$space.8',
+    paddingVertical: '$space.3',
+    borderRadius: '$space.2',
   },
   variants: {
     color: {

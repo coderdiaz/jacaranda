@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { styles } from './jacaranda.config';
+import { sva } from './jacaranda.config';
 
 export const Button = (props) => {
   return (
@@ -9,8 +9,8 @@ export const Button = (props) => {
   );
 };
 
-const buttonStyles = styles({
-  base: { borderRadius: '$spacing.md' },
+const buttonStyles = sva({
+  base: { borderRadius: '$space.md' },
   variants: {
     intent: {
       primary: {
@@ -22,8 +22,8 @@ const buttonStyles = styles({
     },
     size: {
       md: {
-        paddingHorizontal: '$spacing.md',
-        paddingVertical: '$spacing.sm',
+        paddingHorizontal: '$space.md',
+        paddingVertical: '$space.sm',
       },
     },
   },

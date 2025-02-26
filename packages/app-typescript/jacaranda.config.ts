@@ -1,6 +1,6 @@
-import { createTokens } from 'jacaranda';
+import { defineTokens } from 'jacaranda';
 
-export const { styles } = createTokens({
+export const { sva, tokens } = defineTokens({
   colors: {
     white: '#ffffff',
     black: '#000000',
@@ -22,7 +22,7 @@ export const { styles } = createTokens({
     secondary600: '#016464',
     secondary700: '#014747',
   },
-  spacing: {
+  space: {
     1: 4,
     2: 8,
     3: 12,

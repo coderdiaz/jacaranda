@@ -1,6 +1,6 @@
 import { Text } from 'react-native';
 import { VariantProps } from 'jacaranda';
-import { styles } from '../jacaranda.config';
+import { sva } from '../jacaranda.config';
 
 type TypographyProps = VariantProps<typeof typographyStyles> & {
   children?: React.ReactNode;
@@ -10,7 +10,7 @@ export const Typography = (props: TypographyProps) => {
   return <Text style={typographyStyles(props)}>{props.children}</Text>;
 };
 
-const typographyStyles = styles({
+const typographyStyles = sva({
   base: {},
   variants: {
     color: {

@@ -20,7 +20,7 @@ export const { styles } = defineTokens({
     secondary600: '#016464',
     secondary700: '#014747',
   },
-  spacing: {
+  space: {
     xs: 4,
     sm: 8,
     md: 16,
