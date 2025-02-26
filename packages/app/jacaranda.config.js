@@ -1,6 +1,6 @@
-import { createTokens } from "jacaranda";
+import { defineTokens } from "jacaranda";
 
-export const { styles } = createTokens({
+export const { styles } = defineTokens({
   colors: {
     primary50: '#ecfeff',
     primary100: '#cffafe',

@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { styles } from './lib/tokens';
+import { styles } from './jacaranda.config';
 
 export const Button = (props) => {
   return (<TouchableOpacity style={buttonStyles({ intent: props.intent, size: props.size })}>
