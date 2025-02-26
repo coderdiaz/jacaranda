@@ -5,6 +5,7 @@
     "check": "pnpm run --filter './packages/**' --parallel check",
     "ios": "pnpm run --filter './packages/app' ios",
     "ios-typescript": "pnpm run --filter './packages/app-typescript' ios",
+    "prettier": "prettier --log-level=warn --ignore-unknown --no-error-on-unmatched-pattern",
     "test": "vitest run --coverage"
   },
   "devDependencies": {
@@ -16,6 +17,7 @@
   "engines": {
     "node": ">=18.x.x"
   },
+  "packageManager": "pnpm@10.4.1",
   "pnpm": {
     "overrides": {
       "sva": "workspace:*"
