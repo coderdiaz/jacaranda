@@ -4,42 +4,42 @@
 
 Provides a way to styling components in React Native with better experience and composability. The key feature is the ability to create multi-variants styles with a type-safe definition inspired by [Stitches](https://stitches.dev/docs/variants) and [CVA](https://cva.style/docs/getting-started/variants) (for React apps).
 
-#### Currently properties:
+#### Available properties:
 
 - `base`: The base styles for the element.
 - `variants`: The different visual styles for the element.
 - `compoundVariants`: Styles that apply when multiple other variant conditions are met.
-- `default`: Set a variant by default.
+- `defaultVariants`: Set a variant by default when no variant is provided.
 
 #### Roadmap
 
 - [x] Variants definition.
 - [x] Default variants.
 - [x] Support to define design tokens.
-- [ ] Styles based on conditions.
 - [ ] Default design tokens.
 
 ### Create your config file
-To configure `Jacaranda`, create a `jacaranda.config.ts` file (`.js` works too) to define your reusable design tokens and import the `createTokens` function.
+To configure `Jacaranda`, create a `jacaranda.config.ts` file (`.js` works too) to define your reusable design tokens and import the `defineTokens` function.
+
 ```tsx
 // jacaranda.config.ts
-import { createTokens } from 'jacaranda';
+import { defineTokens } from 'jacaranda';
 ```
 
 This function receives an object with the design tokens.
-- `colors`: Define your colors.
-- `fontSize`: Define your font sizes.
-- `spacing`: Define your spacing.
+- `colors`: Define your colors design tokens.
+- `space`: Define your spacing.
 - `fonts`: Define your fonts.
+- `fontSize`: Define your font sizes.
 - `lineHeight`: Define your line heights.
 
 And returns a `styles` function that you can use to style your components.
 
 ```tsx 
 // jacaranda.config.ts
-import { createTokens } from 'jacaranda';
+import { defineTokens } from 'jacaranda';
 
-export const { styles } = createTokens({
+export const { styles } = defineTokens({
   colors: {
     primary50: '#ecfeff',
     primary100: '#cffafe',
@@ -109,7 +109,7 @@ const buttonStyles = styles({
       lg: { paddingHorizontal: 16, paddingVertical: 10 },
     },
   },
-  default: {
+  defaultVariants: {
     intent: 'primary',
     size: 'md',
   },
