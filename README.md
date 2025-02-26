@@ -1,5 +1,12 @@
 ## 🌸 Jacaranda
 
+![NPM Version](https://img.shields.io/npm/v/jacaranda?style=flat)
+![NPM License](https://img.shields.io/npm/l/jacaranda?style=flat)
+![NPM Downloads](https://img.shields.io/npm/dt/jacaranda?style=flat)
+![GitHub Issues](https://img.shields.io/github/issues/coderdiaz/jacaranda?style=flat)
+![GitHub Stars](https://img.shields.io/github/stars/coderdiaz/jacaranda?style=flat)
+
+
 > ⚠️ **BETA SOFTWARE**: This library is in active development and not yet recommended for production use. APIs may change without notice. Feel free to try it out and provide feedback!
 
 Provides a way to styling components in React Native with better experience and composability. The key feature is the ability to create multi-variants styles with a type-safe definition inspired by [Stitches](https://stitches.dev/docs/variants) and [CVA](https://cva.style/docs/getting-started/variants) (for React apps).

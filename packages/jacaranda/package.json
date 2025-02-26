@@ -19,9 +19,9 @@
   "files": [
     "dist"
   ],
-  "homepage": "https://github.com/coderdiaz/sva#readme",
-  "bugs": "https://github.com/coderdiaz/sva/issues",
-  "repository": "https://github.com/coderdiaz/sva.git",
+  "homepage": "https://github.com/coderdiaz/jacaranda#readme",
+  "bugs": "https://github.com/coderdiaz/jacaranda/issues",
+  "repository": "https://github.com/coderdiaz/jacaranda.git",
   "devDependencies": {
     "@swc/cli": "0.3.12",
     "@swc/core": "1.4.16",
@@ -59,7 +59,8 @@
     "types": "dist/index.d.ts"
   },
   "keywords": [
-    "sva",
+    "cva",
+    "class-variance-authority",
     "style-variant-api",
     "jacaranda",
     "stitches",
