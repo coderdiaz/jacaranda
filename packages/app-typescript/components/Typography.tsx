@@ -7,8 +7,8 @@ type TypographyProps = VariantProps<typeof typographyStyles> & {
 };
 
 export const Typography = (props: TypographyProps) => {
-  return <Text style={typographyStyles(props)}>{props.children}</Text>
-}
+  return <Text style={typographyStyles(props)}>{props.children}</Text>;
+};
 
 const typographyStyles = styles({
   base: {},
@@ -34,12 +34,12 @@ const typographyStyles = styles({
       left: { textAlign: 'left' },
       center: { textAlign: 'center' },
       right: { textAlign: 'right' },
-    }
+    },
   },
   defaultVariants: {
     level: 3,
     color: 'white',
     weight: 'medium',
-    align: 'left'
-  }
-})
+    align: 'left',
+  },
+});

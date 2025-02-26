@@ -48,9 +48,9 @@ type ResolvedStyle = ViewStyle & TextStyle & ImageStyle;
 // StyleObject now extends ResolvedStyle
 type StyleObject = {
   [K in keyof ResolvedStyle]?:
-  | ResolvedStyle[K]
-  | (string extends ResolvedStyle[K] ? `$${string}` : never)
-  | (number extends ResolvedStyle[K] ? `$${string}` : never);
+    | ResolvedStyle[K]
+    | (string extends ResolvedStyle[K] ? `$${string}` : never)
+    | (number extends ResolvedStyle[K] ? `$${string}` : never);
 };
 
 // Define the VariantOptions type to ensure type safety in variant definitions
@@ -147,7 +147,6 @@ export function styles<V extends VariantOptions<V>>(config: VariantStyleConfig<V
   };
 }
 
-
 /**** Tokens definition */
 
 // Define allowed token categories and their value types
@@ -206,15 +205,20 @@ export function defineTokens<T extends TokenConfig>(tokenConfig: T): CreateToken
     const resolvedBase = config.base ? resolveTokens(config.base, tokens) : config.base;
 
     // Resolve tokens in variants
-    const resolvedVariants = config.variants ? Object.entries(config.variants).reduce((acc, [key, variantGroup]: [string, any]) => {
-      const resolvedGroup = Object.entries(variantGroup).reduce((groupAcc, [variantKey, styles]: [string, any]) => {
-        return {
-          ...groupAcc,
-          [variantKey]: resolveTokens(styles, tokens),
-        };
-      }, {});
-      return { ...acc, [key]: resolvedGroup };
-    }, {}) : {};
+    const resolvedVariants = config.variants
+      ? Object.entries(config.variants).reduce((acc, [key, variantGroup]: [string, any]) => {
+          const resolvedGroup = Object.entries(variantGroup).reduce(
+            (groupAcc, [variantKey, styles]: [string, any]) => {
+              return {
+                ...groupAcc,
+                [variantKey]: resolveTokens(styles, tokens),
+              };
+            },
+            {},
+          );
+          return { ...acc, [key]: resolvedGroup };
+        }, {})
+      : {};
 
     // Resolve tokens in compound variants
     const resolvedCompoundVariants = config.compoundVariants?.map((compound: any) => ({

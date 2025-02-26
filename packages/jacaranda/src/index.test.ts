@@ -200,13 +200,15 @@ describe('defineTokens', () => {
         size: { small: {} },
         type: { primary: {} },
       },
-      compoundVariants: [{
-        variants: { size: 'small' as const, type: 'primary' as const },
-        style: {
-          backgroundColor: '$colors.primary',
-          padding: '$space.sm',
+      compoundVariants: [
+        {
+          variants: { size: 'small' as const, type: 'primary' as const },
+          style: {
+            backgroundColor: '$colors.primary',
+            padding: '$space.sm',
+          },
         },
-      }],
+      ],
     });
 
     expect(result({ size: 'small', type: 'primary' })).toEqual({
@@ -263,4 +265,4 @@ describe('defineTokens', () => {
       lineHeight: 1.5,
     });
   });
-}); 
+});

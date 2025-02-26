@@ -6,7 +6,6 @@
 ![GitHub Issues](https://img.shields.io/github/issues/coderdiaz/jacaranda?style=flat)
 ![GitHub Stars](https://img.shields.io/github/stars/coderdiaz/jacaranda?style=flat)
 
-
 > ⚠️ **BETA SOFTWARE**: This library is in active development and not yet recommended for production use. APIs may change without notice. Feel free to try it out and provide feedback!
 
 Provides a way to styling components in React Native with better experience and composability. The key feature is the ability to create multi-variants styles with a type-safe definition inspired by [Stitches](https://stitches.dev/docs/variants) and [CVA](https://cva.style/docs/getting-started/variants) (for React apps).
@@ -26,6 +25,7 @@ Provides a way to styling components in React Native with better experience and 
 - [ ] Default design tokens.
 
 ### Create your config file
+
 To configure `Jacaranda`, create a `jacaranda.config.ts` file (`.js` works too) to define your reusable design tokens and import the `defineTokens` function.
 
 ```tsx
@@ -34,6 +34,7 @@ import { defineTokens } from 'jacaranda';
 ```
 
 This function receives an object with the design tokens.
+
 - `colors`: Define your colors design tokens.
 - `space`: Define your spacing.
 - `fonts`: Define your fonts.
@@ -42,7 +43,7 @@ This function receives an object with the design tokens.
 
 And returns a `styles` function that you can use to style your components.
 
-```tsx 
+```tsx
 // jacaranda.config.ts
 import { defineTokens } from 'jacaranda';
 
@@ -73,8 +74,9 @@ export const { styles } = defineTokens({
     xl: 32,
     xxl: 40,
   },
-})
+});
 ```
+
 ### Import and use it
 
 After the tokens are defined, you can use the design tokens in your components. You'll be importing the `styles` function from the `jacaranda.config.ts` file.
@@ -124,6 +126,7 @@ const buttonStyles = styles({
 ```
 
 ### TypeScript
+
 #### Extract variants from a component
 
 You can use the `VariantProps` type to extract the variants from a component.

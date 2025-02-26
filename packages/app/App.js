@@ -2,10 +2,12 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { styles } from './jacaranda.config';
 
 export const Button = (props) => {
-  return (<TouchableOpacity style={buttonStyles({ intent: props.intent, size: props.size })}>
-    <Text>Button</Text>
-  </TouchableOpacity>)
-}
+  return (
+    <TouchableOpacity style={buttonStyles({ intent: props.intent, size: props.size })}>
+      <Text>Button</Text>
+    </TouchableOpacity>
+  );
+};
 
 const buttonStyles = styles({
   base: { borderRadius: '$spacing.md' },
@@ -16,20 +18,20 @@ const buttonStyles = styles({
       },
       secondary: {
         backgroundColor: '$colors.secondary50',
-      }
+      },
     },
     size: {
       md: {
         paddingHorizontal: '$spacing.md',
         paddingVertical: '$spacing.sm',
-      }
-    }
+      },
+    },
   },
   defaultVariants: {
     intent: 'primary',
-    size: 'md'
-  }
-})
+    size: 'md',
+  },
+});
 
 export default function App() {
   return (

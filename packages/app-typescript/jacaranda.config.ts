@@ -31,5 +31,5 @@ export const { styles } = createTokens({
     6: 24,
     7: 28,
     8: 32,
-  }
+  },
 });

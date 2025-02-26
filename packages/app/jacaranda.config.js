@@ -1,4 +1,4 @@
-import { defineTokens } from "jacaranda";
+import { defineTokens } from 'jacaranda';
 
 export const { styles } = defineTokens({
   colors: {
@@ -28,4 +28,4 @@ export const { styles } = defineTokens({
     xl: 32,
     xxl: 40,
   },
-})
+});
