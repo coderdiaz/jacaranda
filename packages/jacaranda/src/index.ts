@@ -96,7 +96,7 @@ export type VariantProps<Component extends (...args: any) => any> = Omit<
 /**
  * Creates a function that generates styles based on variants
  */
-export function styles<V extends VariantOptions<V>>(config: VariantStyleConfig<V>) {
+function styles<V extends VariantOptions<V>>(config: VariantStyleConfig<V>) {
   type VariantProps = { [P in keyof V]: keyof V[P] | (string & {}) };
   type DefaultProps = NonNullable<typeof config.defaultVariants>;
   type Props = OptionalIfHasDefault<VariantProps, DefaultProps>;
