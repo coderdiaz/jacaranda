@@ -41,13 +41,13 @@ This function receives an object with the design tokens.
 - `fontSize`: Define your font sizes.
 - `lineHeight`: Define your line heights.
 
-And returns a `styles` function that you can use to style your components.
+And returns a `sva` function that you can use to style your components.
 
 ```tsx
 // jacaranda.config.ts
 import { defineTokens } from 'jacaranda';
 
-export const { styles } = defineTokens({
+export const { sva, tokens } = defineTokens({
   colors: {
     primary50: '#ecfeff',
     primary100: '#cffafe',
@@ -79,13 +79,13 @@ export const { styles } = defineTokens({
 
 ### Import and use it
 
-After the tokens are defined, you can use the design tokens in your components. You'll be importing the `styles` function from the `jacaranda.config.ts` file.
+After the tokens are defined, you can use the design tokens in your components. You'll be importing the `sva` function from the `jacaranda.config.ts` file.
 
 ```tsx
 // Button.tsx
 import { TouchableOpacity } from 'react-native';
 import { type VariantProps } from 'jacaranda';
-import { styles } from './jacaranda.config';
+import { sva } from './jacaranda.config';
 
 type ButtonProps = VariantProps<typeof buttonStyles> & {
   children?: React.ReactNode;
@@ -99,7 +99,7 @@ export const Button = (props: ButtonProps) => {
   );
 };
 
-const buttonStyles = styles({
+const buttonStyles = sva({
   base: {
     borderRadius: 8,
   },
