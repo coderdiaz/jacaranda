@@ -1,9 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { styles, defineTokens } from './';
+import { defineTokens } from './';
 
 describe('sva', () => {
   it('should return base styles when no variants are provided', () => {
-    const baseStyles = styles({
+    const { sva } = defineTokens({});
+    const baseStyles = sva({
       base: { display: 'flex' },
       variants: {},
     });
@@ -12,7 +13,8 @@ describe('sva', () => {
   });
 
   it('should apply variant styles correctly', () => {
-    const buttonStyles = styles({
+    const { sva } = defineTokens({});
+    const buttonStyles = sva({
       base: { display: 'flex' },
       variants: {
         visual: {
@@ -36,7 +38,8 @@ describe('sva', () => {
   });
 
   it('should apply default variants when props are not provided', () => {
-    const buttonStyles = styles({
+    const { sva } = defineTokens({});
+    const buttonStyles = sva({
       base: { display: 'flex' },
       variants: {
         visual: {
@@ -56,7 +59,8 @@ describe('sva', () => {
   });
 
   it('should apply compound variants correctly', () => {
-    const buttonStyles = styles({
+    const { sva } = defineTokens({});
+    const buttonStyles = sva({
       base: { display: 'flex' },
       variants: {
         visual: {
@@ -85,7 +89,8 @@ describe('sva', () => {
   });
 
   it('should override default variants with provided props', () => {
-    const buttonStyles = styles({
+    const { sva } = defineTokens({});
+    const buttonStyles = sva({
       base: { display: 'flex' },
       variants: {
         visual: {
@@ -105,7 +110,8 @@ describe('sva', () => {
   });
 
   it('should handle invalid variant values gracefully', () => {
-    const buttonStyles = styles({
+    const { sva } = defineTokens({});
+    const buttonStyles = sva({
       base: { display: 'flex' },
       variants: {
         visual: {
