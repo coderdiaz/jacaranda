@@ -117,7 +117,10 @@ function styles<V extends VariantOptions<V>>(config: VariantStyleConfig<V>) {
     } as VariantProps;
 
     // Apply variant styles
-    for (const [propName, value] of Object.entries(mergedProps) as [keyof V, keyof VariantProps[keyof V] | boolean][]) {
+    for (const [propName, value] of Object.entries(mergedProps) as [
+      keyof V,
+      keyof VariantProps[keyof V] | boolean,
+    ][]) {
       const variantGroup = config.variants[propName];
       if (variantGroup) {
         // Handle boolean variants
@@ -146,15 +149,13 @@ function styles<V extends VariantOptions<V>>(config: VariantStyleConfig<V>) {
     if (config.compoundVariants) {
       for (const compound of config.compoundVariants) {
         if (
-          Object.entries(compound.variants).every(
-            ([propName, value]) => {
-              // Handle boolean values in compound variants
-              if (typeof value === 'boolean') {
-                return mergedProps[propName as keyof V] === value;
-              }
+          Object.entries(compound.variants).every(([propName, value]) => {
+            // Handle boolean values in compound variants
+            if (typeof value === 'boolean') {
               return mergedProps[propName as keyof V] === value;
             }
-          )
+            return mergedProps[propName as keyof V] === value;
+          })
         ) {
           styles = {
             ...styles,
@@ -191,22 +192,25 @@ interface CreateTokensReturn {
 
 // Helper to resolve token references in style objects
 function resolveTokens(style: StyleObject, tokens: TokenConfig): StyleObject {
-  return Object.entries(style).reduce<Record<string, ResolvedStyle[keyof ResolvedStyle]>>((acc, [key, value]) => {
-    if (typeof value !== 'string' || !value.startsWith('$')) {
-      acc[key] = value;
+  return Object.entries(style).reduce<Record<string, ResolvedStyle[keyof ResolvedStyle]>>(
+    (acc, [key, value]) => {
+      if (typeof value !== 'string' || !value.startsWith('$')) {
+        acc[key] = value;
+        return acc;
+      }
+
+      const tokenPath = value.slice(1).split('.');
+      const [category, token] = tokenPath;
+
+      const tokenValue = tokens[category as keyof TokenConfig]?.[token];
+      if (tokenValue !== undefined) {
+        acc[key] = tokenValue;
+      }
+
       return acc;
-    }
-
-    const tokenPath = value.slice(1).split('.');
-    const [category, token] = tokenPath;
-
-    const tokenValue = tokens[category as keyof TokenConfig]?.[token];
-    if (tokenValue !== undefined) {
-      acc[key] = tokenValue;
-    }
-
-    return acc;
-  }, {}) as StyleObject;
+    },
+    {},
+  ) as StyleObject;
 }
 
 /**
@@ -228,25 +232,24 @@ export function defineTokens<T extends TokenConfig>(tokenConfig: T): CreateToken
 
     // Resolve tokens in variants
     const resolvedVariants = config.variants
-      ? Object.entries(config.variants).reduce<Partial<V>>((acc, [key, variantGroup]) => {
+      ? (Object.entries(config.variants).reduce<Partial<V>>((acc, [key, variantGroup]) => {
           type VariantGroupType = Record<string, StyleObject>;
-          
-          const resolvedGroup = Object.entries(variantGroup as VariantGroupType).reduce<Record<string, StyleObject>>(
-            (groupAcc, [variantKey, variantStyles]) => {
-              return {
-                ...groupAcc,
-                [variantKey]: resolveTokens(variantStyles, tokens),
-              };
-            },
-            {}
-          );
-          
-          return { 
-            ...acc, 
-            [key as keyof V]: resolvedGroup as V[keyof V]
+
+          const resolvedGroup = Object.entries(variantGroup as VariantGroupType).reduce<
+            Record<string, StyleObject>
+          >((groupAcc, [variantKey, variantStyles]) => {
+            return {
+              ...groupAcc,
+              [variantKey]: resolveTokens(variantStyles, tokens),
+            };
+          }, {});
+
+          return {
+            ...acc,
+            [key as keyof V]: resolvedGroup as V[keyof V],
           };
-        }, {}) as V
-      : {} as V;
+        }, {}) as V)
+      : ({} as V);
 
     // Resolve tokens in compound variants
     const resolvedCompoundVariants = config.compoundVariants?.map((compound) => ({
