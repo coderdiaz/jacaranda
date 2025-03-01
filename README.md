@@ -10,12 +10,14 @@
 
 Provides a way to styling components in React Native with better experience and composability. The key feature is the ability to create multi-variants styles with a type-safe definition inspired by [Stitches](https://stitches.dev/docs/variants) and [CVA](https://cva.style/docs/getting-started/variants) (for React apps).
 
-#### Available properties:
+## Features
 
-- `base`: The base styles for the element.
-- `variants`: The different visual styles for the element.
-- `compoundVariants`: Styles that apply when multiple other variant conditions are met.
-- `defaultVariants`: Set a variant by default when no variant is provided.
+- 🎨 Token-based styling system
+- 🧩 Variant API for conditional styling
+- 🔄 Compound variants for complex style combinations
+- 🧠 Type-safe with full TypeScript support
+- 🏎️ Lightweight and performant
+- 🧪 Fully tested
 
 #### Roadmap
 
@@ -81,6 +83,13 @@ export const { sva, tokens } = defineTokens({
 
 After the tokens are defined, you can use the design tokens in your components. You'll be importing the `sva` function from the `jacaranda.config.ts` file.
 
+#### Available properties:
+
+- `base`: The base styles for the element.
+- `variants`: The different visual styles for the element.
+- `compoundVariants`: Styles that apply when multiple other variant conditions are met.
+- `defaultVariants`: Set a variant by default when no variant is provided.
+
 ```tsx
 // Button.tsx
 import { TouchableOpacity } from 'react-native';
@@ -123,6 +132,29 @@ const buttonStyles = sva({
     size: 'md',
   },
 });
+```
+
+### Styled Components with Design Tokens
+
+Jacaranda provides a `styled` function similar to `styled-components` that allows you to create styled React Native components with access to your design tokens.
+
+#### Key features:
+
+- Create reusable styled components from any React Native component
+- Access design tokens using the `$` prefix (e.g. `$colors.primary50`)
+- Supports all React Native style properties
+
+```tsx
+import { View } from 'react-native';
+import { styled } from './jacaranda.config';
+
+const StyledView = styled(View)({
+  backgroundColor: '$colors.primary50',
+});
+
+export const Screen = () => {
+  return <StyledView></StyledView>;
+};
 ```
 
 ### TypeScript
