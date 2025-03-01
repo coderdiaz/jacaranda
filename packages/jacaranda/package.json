@@ -28,6 +28,7 @@
     "react-native": "^0.76.0"
   },
   "peerDependencies": {
+    "react": "*",
     "react-native": "*",
     "typescript": ">=4.5.5"
   },
