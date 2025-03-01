@@ -1,5 +1,5 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { sva } from './jacaranda.config';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { sva, styled } from './jacaranda.config';
 
 export const Button = (props) => {
   return (
@@ -33,19 +33,18 @@ const buttonStyles = sva({
   },
 });
 
+const StyledView = styled(View)({
+  flex: 1,
+  backgroundColor: '$colors.white',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '$space.3',
+});
+
 export default function App() {
   return (
-    <View style={sty.container}>
+    <StyledView>
       <Button intent="primary" />
-    </View>
+    </StyledView>
   );
 }
-
-const sty = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

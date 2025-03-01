@@ -1,6 +1,6 @@
 import { defineTokens } from 'jacaranda';
 
-export const { sva, tokens } = defineTokens({
+export const { sva, tokens, styled } = defineTokens({
   colors: {
     white: '#ffffff',
     black: '#000000',

@@ -1,11 +1,20 @@
+import { View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
+import { styled } from './jacaranda.config';
 import { Typography } from './components/Typography';
 import { Button } from './components/Button';
 
+const StyledView = styled(View)({
+  flex: 1,
+  backgroundColor: '$colors.white',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '$space.3',
+});
+
 export default function App() {
   return (
-    <View style={sty.container}>
+    <StyledView>
       <StatusBar style="auto" />
       <Button color="secondary">
         <Typography color="white">Hello</Typography>
@@ -13,16 +22,6 @@ export default function App() {
       <Button color="primary">
         <Typography color="black">Hello</Typography>
       </Button>
-    </View>
+    </StyledView>
   );
 }
-
-const sty = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 12,
-  },
-});
