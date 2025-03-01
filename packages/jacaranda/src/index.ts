@@ -62,14 +62,14 @@ type VariantOptions<V> = {
 
 type CompoundVariant<V> = {
   variants: Partial<{
-    [P in keyof V]: keyof V[P];
+    [P in keyof V]: keyof V[P] | boolean;
   }>;
   style: StyleObject;
 };
 
 // DefaultVariants type
 type DefaultVariants<V> = Partial<{
-  [P in keyof V]: keyof V[P];
+  [P in keyof V]: keyof V[P] | boolean;
 }>;
 
 // VariantStyleConfig type
@@ -97,7 +97,7 @@ export type VariantProps<Component extends (...args: any) => any> = Omit<
  * Creates a function that generates styles based on variants
  */
 function styles<V extends VariantOptions<V>>(config: VariantStyleConfig<V>) {
-  type VariantProps = { [P in keyof V]: keyof V[P] | (string & {}) };
+  type VariantProps = { [P in keyof V]: keyof V[P] | boolean | (string & {}) };
   type DefaultProps = NonNullable<typeof config.defaultVariants>;
   type Props = OptionalIfHasDefault<VariantProps, DefaultProps>;
 
@@ -117,12 +117,24 @@ function styles<V extends VariantOptions<V>>(config: VariantStyleConfig<V>) {
     for (const [propName, value] of Object.entries(mergedProps) as [keyof V, any][]) {
       const variantGroup = config.variants[propName];
       if (variantGroup) {
-        const variantValue = value || config.defaultVariants?.[propName];
-        if (variantValue && variantGroup[variantValue as keyof typeof variantGroup]) {
-          styles = {
-            ...styles,
-            ...variantGroup[variantValue as keyof typeof variantGroup],
-          };
+        // Handle boolean variants
+        if (typeof value === 'boolean') {
+          const booleanValue = value ? 'true' : 'false';
+          if (variantGroup[booleanValue as keyof typeof variantGroup]) {
+            styles = {
+              ...styles,
+              ...variantGroup[booleanValue as keyof typeof variantGroup],
+            };
+          }
+        } else {
+          // Handle string/enum variants
+          const variantValue = value || config.defaultVariants?.[propName];
+          if (variantValue && variantGroup[variantValue as keyof typeof variantGroup]) {
+            styles = {
+              ...styles,
+              ...variantGroup[variantValue as keyof typeof variantGroup],
+            };
+          }
         }
       }
     }
@@ -132,7 +144,13 @@ function styles<V extends VariantOptions<V>>(config: VariantStyleConfig<V>) {
       for (const compound of config.compoundVariants) {
         if (
           Object.entries(compound.variants).every(
-            ([propName, value]: [string, unknown]) => mergedProps[propName as keyof V] === value,
+            ([propName, value]: [string, unknown]) => {
+              // Handle boolean values in compound variants
+              if (typeof value === 'boolean') {
+                return mergedProps[propName as keyof V] === value;
+              }
+              return mergedProps[propName as keyof V] === value;
+            }
           )
         ) {
           styles = {

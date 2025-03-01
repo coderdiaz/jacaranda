@@ -125,6 +125,82 @@ describe('sva', () => {
       display: 'flex',
     });
   });
+
+  it('should support boolean variants', () => {
+    const { sva } = defineTokens({});
+    const buttonStyles = sva({
+      base: { display: 'flex' },
+      variants: {
+        disabled: {
+          true: { opacity: 0.5 },
+          false: { opacity: 1 }
+        }
+      },
+      defaultVariants: {
+        disabled: false
+      }
+    });
+
+    // Test with explicit true value
+    expect(buttonStyles({ disabled: true })).toEqual({
+      display: 'flex',
+      opacity: 0.5
+    });
+
+    // Test with explicit false value
+    expect(buttonStyles({ disabled: false })).toEqual({
+      display: 'flex',
+      opacity: 1
+    });
+
+    // Test with default value
+    expect(buttonStyles()).toEqual({
+      display: 'flex',
+      opacity: 1
+    });
+  });
+
+  it('should support compound variants with boolean values', () => {
+    const { sva } = defineTokens({});
+    const buttonStyles = sva({
+      base: { display: 'flex' },
+      variants: {
+        disabled: {
+          true: { opacity: 0.5 },
+          false: { opacity: 1 }
+        },
+        size: {
+          sm: { padding: 4 },
+          lg: { padding: 8 },
+        }
+      },
+      compoundVariants: [
+        {
+          variants: { disabled: true, size: 'lg' },
+          style: { fontStyle: 'italic' },
+        },
+      ],
+      defaultVariants: {
+        disabled: false,
+        size: 'sm'
+      }
+    });
+
+    // Test compound variant with boolean true
+    expect(buttonStyles({ disabled: true, size: 'lg' })).toEqual({
+      display: 'flex',
+      opacity: 0.5,
+      padding: 8,
+      fontStyle: 'italic'
+    });
+
+    // Test without triggering compound variant
+    expect(buttonStyles({ disabled: true, size: 'sm' })).toEqual({
+      display: 'flex',
+      opacity: 0.5,
+      padding: 4
+    });
+  });
 });
 
 describe('defineTokens', () => {
