@@ -219,7 +219,7 @@ export function defineTokens<T extends TokenConfig>(tokenConfig: T): CreateToken
   }, {} as TokenConfig);
 
   // Create a wrapped styles function that resolves token references
-  const sva: typeof styles = (config: any) => {
+  const sva: typeof styles = <V extends VariantOptions<V>>(config: VariantStyleConfig<V>) => {
     // Resolve tokens in base styles
     const resolvedBase = config.base ? resolveTokens(config.base, tokens) : config.base;
 
@@ -236,8 +236,8 @@ export function defineTokens<T extends TokenConfig>(tokenConfig: T): CreateToken
             {},
           );
           return { ...acc, [key]: resolvedGroup };
-        }, {})
-      : {};
+        }, {}) as V
+      : {} as V;
 
     // Resolve tokens in compound variants
     const resolvedCompoundVariants = config.compoundVariants?.map((compound: any) => ({
