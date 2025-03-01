@@ -60,6 +60,9 @@ type VariantOptions<V> = {
   };
 };
 
+// BooleanVariantKey type for 'true' and 'false' string literals
+type BooleanVariantKey = 'true' | 'false';
+
 type CompoundVariant<V> = {
   variants: Partial<{
     [P in keyof V]: keyof V[P] | boolean;
@@ -88,7 +91,7 @@ export type OmitUndefined<T> = T extends undefined ? never : T;
 type OptionalIfHasDefault<Props, Defaults> = Omit<Props, keyof Defaults> &
   Partial<Pick<Props, Extract<keyof Defaults, keyof Props>>>;
 
-export type VariantProps<Component extends (...args: any) => any> = Omit<
+export type VariantProps<Component extends <T>(arg: T) => ReturnType<Component>> = Omit<
   OmitUndefined<Parameters<Component>[0]>,
   'style'
 >;
@@ -114,12 +117,12 @@ function styles<V extends VariantOptions<V>>(config: VariantStyleConfig<V>) {
     } as VariantProps;
 
     // Apply variant styles
-    for (const [propName, value] of Object.entries(mergedProps) as [keyof V, any][]) {
+    for (const [propName, value] of Object.entries(mergedProps) as [keyof V, keyof VariantProps[keyof V] | boolean][]) {
       const variantGroup = config.variants[propName];
       if (variantGroup) {
         // Handle boolean variants
         if (typeof value === 'boolean') {
-          const booleanValue = value ? 'true' : 'false';
+          const booleanValue: BooleanVariantKey = value ? 'true' : 'false';
           if (variantGroup[booleanValue as keyof typeof variantGroup]) {
             styles = {
               ...styles,
@@ -144,7 +147,7 @@ function styles<V extends VariantOptions<V>>(config: VariantStyleConfig<V>) {
       for (const compound of config.compoundVariants) {
         if (
           Object.entries(compound.variants).every(
-            ([propName, value]: [string, unknown]) => {
+            ([propName, value]) => {
               // Handle boolean values in compound variants
               if (typeof value === 'boolean') {
                 return mergedProps[propName as keyof V] === value;
@@ -188,7 +191,7 @@ interface CreateTokensReturn {
 
 // Helper to resolve token references in style objects
 function resolveTokens(style: StyleObject, tokens: TokenConfig): StyleObject {
-  return Object.entries(style).reduce<Record<string, any>>((acc, [key, value]) => {
+  return Object.entries(style).reduce<Record<string, ResolvedStyle[keyof ResolvedStyle]>>((acc, [key, value]) => {
     if (typeof value !== 'string' || !value.startsWith('$')) {
       acc[key] = value;
       return acc;
@@ -225,22 +228,28 @@ export function defineTokens<T extends TokenConfig>(tokenConfig: T): CreateToken
 
     // Resolve tokens in variants
     const resolvedVariants = config.variants
-      ? Object.entries(config.variants).reduce((acc, [key, variantGroup]: [string, any]) => {
-          const resolvedGroup = Object.entries(variantGroup).reduce(
-            (groupAcc, [variantKey, styles]: [string, any]) => {
+      ? Object.entries(config.variants).reduce<Partial<V>>((acc, [key, variantGroup]) => {
+          type VariantGroupType = Record<string, StyleObject>;
+          
+          const resolvedGroup = Object.entries(variantGroup as VariantGroupType).reduce<Record<string, StyleObject>>(
+            (groupAcc, [variantKey, variantStyles]) => {
               return {
                 ...groupAcc,
-                [variantKey]: resolveTokens(styles, tokens),
+                [variantKey]: resolveTokens(variantStyles, tokens),
               };
             },
-            {},
+            {}
           );
-          return { ...acc, [key]: resolvedGroup };
+          
+          return { 
+            ...acc, 
+            [key as keyof V]: resolvedGroup as V[keyof V]
+          };
         }, {}) as V
       : {} as V;
 
     // Resolve tokens in compound variants
-    const resolvedCompoundVariants = config.compoundVariants?.map((compound: any) => ({
+    const resolvedCompoundVariants = config.compoundVariants?.map((compound) => ({
       ...compound,
       style: resolveTokens(compound.style, tokens),
     }));
