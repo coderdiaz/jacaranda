@@ -40,6 +40,7 @@
 //   }
 // });
 
+import React, { type ComponentType, type ReactNode } from 'react';
 import { ImageStyle, TextStyle, ViewStyle, StyleProp } from 'react-native';
 
 // Define a type that removes token strings from style properties
@@ -91,10 +92,7 @@ export type OmitUndefined<T> = T extends undefined ? never : T;
 type OptionalIfHasDefault<Props, Defaults> = Omit<Props, keyof Defaults> &
   Partial<Pick<Props, Extract<keyof Defaults, keyof Props>>>;
 
-export type VariantProps<Component extends <T>(arg: T) => ReturnType<Component>> = Omit<
-  OmitUndefined<Parameters<Component>[0]>,
-  'style'
->;
+export type VariantProps<T> = T extends (props?: infer P) => StyleProp<ResolvedStyle> ? P : never;
 
 /**
  * Creates a function that generates styles based on variants
@@ -185,9 +183,21 @@ type TokenConfig = {
   [K in keyof AllowedTokenCategories]?: Record<string, AllowedTokenCategories[K]>;
 };
 
+// Helper type to extract component props
+type ComponentProps<T> = T extends ComponentType<infer P> ? P : never;
+
+type StyledFunction = <C extends ComponentType<any>>(
+  Component: C,
+) => <P extends object = {}>(
+  styleObject: StyleObject,
+) => ComponentType<
+  P & Omit<ComponentProps<C>, 'style'> & { style?: StyleProp<ViewStyle | TextStyle | ImageStyle> }
+>;
+
 interface CreateTokensReturn {
   sva: typeof styles;
   tokens: TokenConfig;
+  styled: StyledFunction;
 }
 
 // Helper to resolve token references in style objects
@@ -266,8 +276,58 @@ export function defineTokens<T extends TokenConfig>(tokenConfig: T): CreateToken
     });
   };
 
+  /**
+   * Styled function for creating styled components with token-aware styles
+   */
+  const styled: StyledFunction = <C extends ComponentType<any>>(Component: C) => {
+    return <P extends object = {}>(styleObject: StyleObject) => {
+      // Resolve tokens in the style object
+      const resolvedStyle = resolveTokens(styleObject, tokens);
+
+      // Create and return a new component that applies the resolved styles
+      const StyledComponent: ComponentType<
+        P &
+          Omit<ComponentProps<C>, 'style'> & {
+            style?: StyleProp<ViewStyle | TextStyle | ImageStyle>;
+          }
+      > = (props) => {
+        const {
+          children,
+          style: propStyle,
+          ...rest
+        } = props as {
+          children?: ReactNode;
+          style?: StyleProp<ViewStyle | TextStyle | ImageStyle>;
+        } & Record<string, unknown>;
+
+        // Merge the resolved style with any style passed in props
+        const mergedStyle = propStyle
+          ? Array.isArray(propStyle)
+            ? [resolvedStyle, ...propStyle]
+            : [resolvedStyle, propStyle]
+          : resolvedStyle;
+
+        // We need to cast here to handle the component props correctly
+        const componentProps = {
+          ...rest,
+          style: mergedStyle,
+        } as ComponentProps<C>;
+
+        // Use createElement instead of JSX to avoid syntax issues
+        return React.createElement(Component, componentProps, children);
+      };
+
+      // Set display name for better debugging
+      const componentName = Component.displayName || Component.name || 'Component';
+      StyledComponent.displayName = `Styled(${componentName})`;
+
+      return StyledComponent;
+    };
+  };
+
   return {
     sva,
     tokens,
+    styled,
   };
 }
