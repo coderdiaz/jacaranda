@@ -6,13 +6,11 @@
     "ios": "pnpm run --filter './packages/app' ios",
     "ios-typescript": "pnpm run --filter './packages/app-typescript' ios",
     "prettier": "prettier --log-level=warn --ignore-unknown --no-error-on-unmatched-pattern",
-    "test": "vitest run --coverage"
+    "test": "pnpm run --filter './packages/jacaranda' test"
   },
   "devDependencies": {
-    "@vitest/coverage-v8": "3.0.7",
     "prettier": "3.5.2",
-    "typescript": "^5.7.3",
-    "vitest": "^3.0.7"
+    "typescript": "^5.7.3"
   },
   "engines": {
     "node": ">=18.x.x"
