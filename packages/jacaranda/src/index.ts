@@ -41,7 +41,7 @@
 // });
 
 import React, { type ComponentType, type ReactNode } from 'react';
-import { ImageStyle, TextStyle, ViewStyle, StyleProp } from 'react-native';
+import { ImageStyle, TextStyle, ViewStyle, StyleProp, StyleSheet } from 'react-native';
 
 // Define a type that removes token strings from style properties
 type ResolvedStyle = ViewStyle & TextStyle & ImageStyle;
@@ -104,7 +104,7 @@ function styles<V extends VariantOptions<V>>(config: VariantStyleConfig<V>) {
 
   return (props?: Props): StyleProp<ResolvedStyle> => {
     // Start with base styles
-    let styles: StyleObject = {
+    let stylesObj: StyleObject = {
       ...(config.base || {}),
     };
 
@@ -125,8 +125,8 @@ function styles<V extends VariantOptions<V>>(config: VariantStyleConfig<V>) {
         if (typeof value === 'boolean') {
           const booleanValue: BooleanVariantKey = value ? 'true' : 'false';
           if (variantGroup[booleanValue as keyof typeof variantGroup]) {
-            styles = {
-              ...styles,
+            stylesObj = {
+              ...stylesObj,
               ...variantGroup[booleanValue as keyof typeof variantGroup],
             };
           }
@@ -134,8 +134,8 @@ function styles<V extends VariantOptions<V>>(config: VariantStyleConfig<V>) {
           // Handle string/enum variants
           const variantValue = value || config.defaultVariants?.[propName];
           if (variantValue && variantGroup[variantValue as keyof typeof variantGroup]) {
-            styles = {
-              ...styles,
+            stylesObj = {
+              ...stylesObj,
               ...variantGroup[variantValue as keyof typeof variantGroup],
             };
           }
@@ -155,15 +155,18 @@ function styles<V extends VariantOptions<V>>(config: VariantStyleConfig<V>) {
             return mergedProps[propName as keyof V] === value;
           })
         ) {
-          styles = {
-            ...styles,
+          stylesObj = {
+            ...stylesObj,
             ...compound.style,
           };
         }
       }
     }
 
-    return styles as StyleProp<ResolvedStyle>;
+    // Create a StyleSheet for better performance
+    return StyleSheet.create({
+      style: stylesObj as ResolvedStyle,
+    }).style;
   };
 }
 
@@ -284,6 +287,11 @@ export function defineTokens<T extends TokenConfig>(tokenConfig: T): CreateToken
       // Resolve tokens in the style object
       const resolvedStyle = resolveTokens(styleObject, tokens);
 
+      // Create StyleSheet using StyleSheet.create for better performance
+      const styles = StyleSheet.create({
+        style: resolvedStyle as ResolvedStyle,
+      });
+
       // Create and return a new component that applies the resolved styles
       const StyledComponent: ComponentType<
         P &
@@ -300,12 +308,12 @@ export function defineTokens<T extends TokenConfig>(tokenConfig: T): CreateToken
           style?: StyleProp<ViewStyle | TextStyle | ImageStyle>;
         } & Record<string, unknown>;
 
-        // Merge the resolved style with any style passed in props
+        // Merge the StyleSheet style with any style passed in props
         const mergedStyle = propStyle
           ? Array.isArray(propStyle)
-            ? [resolvedStyle, ...propStyle]
-            : [resolvedStyle, propStyle]
-          : resolvedStyle;
+            ? [styles.style, ...propStyle]
+            : [styles.style, propStyle]
+          : styles.style;
 
         // We need to cast here to handle the component props correctly
         const componentProps = {
