@@ -1,7 +1,7 @@
 {
   "name": "jacaranda",
   "description": "A lightweight styling library for React Native",
-  "version": "0.1.0-beta.3",
+  "version": "0.1.0-beta.4",
   "license": "ISC",
   "type": "module",
   "author": {
