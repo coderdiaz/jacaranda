@@ -3,6 +3,7 @@
   "description": "A lightweight styling library for React Native",
   "version": "0.1.0-beta.3",
   "license": "ISC",
+  "type": "module",
   "author": {
     "name": "Javier Diaz Chamorro",
     "email": "hey@coderdiaz.com",
@@ -34,6 +35,7 @@
     "jsdom": "^26.0.0",
     "react": "^18.3.1",
     "react-native": "^0.76.0",
+    "react-test-renderer": "18.2.0",
     "vitest": "3.0.7",
     "vitest-react-native": "^0.1.5"
   },
