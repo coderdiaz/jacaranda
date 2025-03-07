@@ -1,4 +1,7 @@
+import React from 'react';
+import { View } from 'react-native';
 import { describe, it, expect } from 'vitest';
+import { render } from '@testing-library/react-native';
 import { defineTokens } from './';
 
 describe('sva', () => {
@@ -346,5 +349,87 @@ describe('defineTokens', () => {
       fontFamily: 'Arial',
       lineHeight: 1.5,
     });
+  });
+});
+
+describe('styled', () => {
+  it('should render a styled component', async () => {
+    const { styled } = defineTokens({});
+    const StyledView = styled(View)({});
+
+    const rendered = render(React.createElement(StyledView, { testID: 'styled-view' }));
+    const view = await rendered.getByTestId('styled-view');
+
+    expect(view.props.style).toMatchObject({});
+  });
+
+  it('should use defined tokens from the styled function', async () => {
+    const { styled } = defineTokens({
+      colors: {
+        primary: 'red',
+        secondary: 'blue',
+      },
+      space: {
+        small: 10,
+        medium: 20,
+        large: 30,
+      },
+    });
+
+    const StyledView = styled(View)({
+      backgroundColor: '$colors.primary',
+      padding: '$space.small',
+    });
+
+    const rendered = render(React.createElement(StyledView, { testID: 'styled-view' }));
+    const view = await rendered.getByTestId('styled-view');
+
+    expect(view.props.style).toMatchObject({
+      backgroundColor: 'red',
+      padding: 10,
+    });
+  });
+
+  it('should merge styles from props and tokens', async () => {
+    const { styled } = defineTokens({
+      colors: {
+        primary: 'red',
+      },
+    });
+
+    const StyledView = styled(View)({
+      backgroundColor: '$colors.primary',
+    });
+
+    const rendered = render(
+      React.createElement(StyledView, {
+        testID: 'styled-view',
+        style: { backgroundColor: 'blue' },
+      }),
+    );
+    const view = await rendered.getByTestId('styled-view');
+
+    expect(view.props.style).toMatchObject([
+      {
+        backgroundColor: 'red',
+      },
+      { backgroundColor: 'blue' },
+    ]);
+  });
+
+  it('should ignore non defined tokens', async () => {
+    const { styled } = defineTokens({});
+    const StyledView = styled(View)({
+      backgroundColor: '$colors.primary',
+    });
+
+    const rendered = render(
+      React.createElement(StyledView, {
+        testID: 'styled-view',
+      }),
+    );
+    const view = await rendered.getByTestId('styled-view');
+
+    expect(view.props.style).toMatchObject({});
   });
 });
