@@ -26,6 +26,7 @@ Provides a way to styling components in React Native with better experience and 
 - [x] Support to define design tokens.
 - [x] Styled function to styling component using design tokens.
 - [x] Use `Stylesheet.create` instead a simple objects.
+- [x] Access to `props` from styles defined into `styled` components.
 - [ ] Default design tokens.
 
 ### Create your config file
