@@ -108,7 +108,8 @@ function styles<V extends VariantOptions<V>>(config: VariantStyleConfig<V>) {
   type Props = OptionalIfHasDefault<VariantProps, DefaultProps>;
 
   return (props?: Props): StyleProp<ResolvedStyle> => {
-    // Start with base styles
+    // We'll build up styles in the correct hierarchy: base → variants → compound variants
+    // Base styles (lowest priority)
     let stylesObj: StyleObject = {
       ...(config.base || {}),
     };
@@ -119,7 +120,7 @@ function styles<V extends VariantOptions<V>>(config: VariantStyleConfig<V>) {
       ...props,
     } as VariantProps;
 
-    // Apply variant styles
+    // Apply variant styles (overrides base styles)
     for (const [propName, value] of Object.entries(mergedProps) as [
       keyof V,
       keyof VariantProps[keyof V] | boolean,
@@ -148,7 +149,7 @@ function styles<V extends VariantOptions<V>>(config: VariantStyleConfig<V>) {
       }
     }
 
-    // Apply compound variants
+    // Apply compound variants (highest priority before inline styles)
     if (config.compoundVariants) {
       for (const compound of config.compoundVariants) {
         if (
@@ -328,11 +329,10 @@ export function defineTokens<T extends TokenConfig>(tokenConfig: T): CreateToken
           style: resolvedStyle as ResolvedStyle,
         });
 
-        // Merge the StyleSheet style with any style passed in props
+        // Styles hierarchy: base styles → variants → compound variants → inline styles
+        // Inline styles (propStyle) must have highest priority, so they come last in the array
         const mergedStyle = propStyle
-          ? Array.isArray(propStyle)
-            ? [styles.style, ...propStyle]
-            : [styles.style, propStyle]
+          ? [styles.style, ...(Array.isArray(propStyle) ? propStyle : [propStyle])]
           : styles.style;
 
         // We need to cast here to handle the component props correctly
