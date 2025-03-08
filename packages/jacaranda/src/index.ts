@@ -30,7 +30,7 @@
 //   // Optional: Add compound variants for specific combinations
 //   compoundVariants: [
 //     {
-//       variants: { visual: 'solid', size: 'lg' },
+//       variants: { visual: 'solid', size: ['lg'] },
 //       style: { fontWeight: 'bold' },
 //     },
 //   ],
@@ -66,7 +66,7 @@ type BooleanVariantKey = 'true' | 'false';
 
 type CompoundVariant<V> = {
   variants: Partial<{
-    [P in keyof V]: keyof V[P] | boolean;
+    [P in keyof V]: keyof V[P] | boolean | Array<keyof V[P]>;
   }>;
   style: StyleObject;
 };
@@ -152,6 +152,13 @@ function styles<V extends VariantOptions<V>>(config: VariantStyleConfig<V>) {
             if (typeof value === 'boolean') {
               return mergedProps[propName as keyof V] === value;
             }
+
+            // Handle array of values
+            if (Array.isArray(value)) {
+              return value.includes(mergedProps[propName as keyof V]);
+            }
+
+            // Handle single value (string/enum)
             return mergedProps[propName as keyof V] === value;
           })
         ) {

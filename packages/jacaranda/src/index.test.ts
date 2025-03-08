@@ -204,6 +204,57 @@ describe('sva', () => {
       padding: 4,
     });
   });
+
+  it('should support compound variants with array of values', () => {
+    const { sva } = defineTokens({});
+    const buttonStyles = sva({
+      base: { display: 'flex' },
+      variants: {
+        visual: {
+          solid: { backgroundColor: '#FC8181' },
+          outline: { borderWidth: 1 },
+        },
+        size: {
+          sm: { padding: 4 },
+          md: { padding: 6 },
+          lg: { padding: 8 },
+        },
+      },
+      compoundVariants: [
+        {
+          variants: { visual: 'solid', size: ['md', 'lg'] },
+          style: { fontWeight: 'bold' },
+        },
+      ],
+      defaultVariants: {
+        visual: 'solid',
+        size: 'sm',
+      },
+    });
+
+    // Test compound variant with size md (should match the array)
+    expect(buttonStyles({ visual: 'solid', size: 'md' })).toEqual({
+      display: 'flex',
+      backgroundColor: '#FC8181',
+      padding: 6,
+      fontWeight: 'bold',
+    });
+
+    // Test compound variant with size lg (should match the array)
+    expect(buttonStyles({ visual: 'solid', size: 'lg' })).toEqual({
+      display: 'flex',
+      backgroundColor: '#FC8181',
+      padding: 8,
+      fontWeight: 'bold',
+    });
+
+    // Test without triggering compound variant (size sm not in array)
+    expect(buttonStyles({ visual: 'solid', size: 'sm' })).toEqual({
+      display: 'flex',
+      backgroundColor: '#FC8181',
+      padding: 4,
+    });
+  });
 });
 
 describe('defineTokens', () => {
