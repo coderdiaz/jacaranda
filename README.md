@@ -24,6 +24,8 @@ Provides a way to styling components in React Native with better experience and 
 - [x] Variants definition.
 - [x] Default variants.
 - [x] Support to define design tokens.
+- [x] Styled function to styling component using design tokens.
+- [x] Use `Stylesheet.create` instead a simple objects.
 - [ ] Default design tokens.
 
 ### Create your config file
