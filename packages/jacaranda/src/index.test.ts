@@ -483,4 +483,117 @@ describe('styled', () => {
 
     expect(view.props.style).toMatchObject({});
   });
+
+  it('should support function-based styles with props', async () => {
+    const { styled } = defineTokens({});
+
+    interface CustomProps {
+      isActive: boolean;
+    }
+
+    const StyledView = styled(View)<CustomProps>((props) => ({
+      backgroundColor: props.isActive ? 'blue' : 'gray',
+    }));
+
+    // Render with isActive=true
+    const renderedActive = render(
+      React.createElement(StyledView, {
+        testID: 'styled-view-active',
+        isActive: true,
+      }),
+    );
+    const activeView = await renderedActive.getByTestId('styled-view-active');
+    expect(activeView.props.style).toMatchObject({
+      backgroundColor: 'blue',
+    });
+
+    // Render with isActive=false
+    const renderedInactive = render(
+      React.createElement(StyledView, {
+        testID: 'styled-view-inactive',
+        isActive: false,
+      }),
+    );
+    const inactiveView = await renderedInactive.getByTestId('styled-view-inactive');
+    expect(inactiveView.props.style).toMatchObject({
+      backgroundColor: 'gray',
+    });
+  });
+
+  it('should support function-based styles with tokens', async () => {
+    const { styled } = defineTokens({
+      colors: {
+        active: 'green',
+        inactive: 'red',
+      },
+    });
+
+    interface CustomProps {
+      isActive: boolean;
+    }
+
+    const StyledView = styled(View)<CustomProps>((props) => ({
+      backgroundColor: props.isActive ? '$colors.active' : '$colors.inactive',
+      borderWidth: 1,
+    }));
+
+    // Render with isActive=true
+    const renderedActive = render(
+      React.createElement(StyledView, {
+        testID: 'styled-view-token-active',
+        isActive: true,
+      }),
+    );
+    const activeView = await renderedActive.getByTestId('styled-view-token-active');
+    expect(activeView.props.style).toMatchObject({
+      backgroundColor: 'green',
+      borderWidth: 1,
+    });
+
+    // Render with isActive=false
+    const renderedInactive = render(
+      React.createElement(StyledView, {
+        testID: 'styled-view-token-inactive',
+        isActive: false,
+      }),
+    );
+    const inactiveView = await renderedInactive.getByTestId('styled-view-token-inactive');
+    expect(inactiveView.props.style).toMatchObject({
+      backgroundColor: 'red',
+      borderWidth: 1,
+    });
+  });
+
+  it('should correctly merge prop-based styles with styles from style prop', async () => {
+    const { styled } = defineTokens({});
+
+    interface CustomProps {
+      variant: 'primary' | 'secondary';
+    }
+
+    const StyledView = styled(View)<CustomProps>((props) => ({
+      backgroundColor: props.variant === 'primary' ? 'blue' : 'purple',
+      padding: 10,
+    }));
+
+    const rendered = render(
+      React.createElement(StyledView, {
+        testID: 'styled-view-merged',
+        variant: 'primary',
+        style: { padding: 20, margin: 5 },
+      }),
+    );
+
+    const view = await rendered.getByTestId('styled-view-merged');
+    expect(view.props.style).toMatchObject([
+      {
+        backgroundColor: 'blue',
+        padding: 10,
+      },
+      {
+        padding: 20,
+        margin: 5,
+      },
+    ]);
+  });
 });

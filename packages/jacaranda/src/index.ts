@@ -40,6 +40,11 @@
 //   }
 // });
 
+// Example of using a styled component with a custom prop
+// const button = styled(Button)<{ otherProp: string }>((props) => {
+//   position: props.otherProp ? 'absolute' : 'relative';
+// });
+
 import React, { type ComponentType, type ReactNode } from 'react';
 import { ImageStyle, TextStyle, ViewStyle, StyleProp, StyleSheet } from 'react-native';
 
@@ -199,7 +204,7 @@ type ComponentProps<T> = T extends ComponentType<infer P> ? P : never;
 type StyledFunction = <C extends ComponentType<any>>(
   Component: C,
 ) => <P extends object = {}>(
-  styleObject: StyleObject,
+  styleObject: StyleObject | ((props: P & Omit<ComponentProps<C>, 'style'>) => StyleObject),
 ) => ComponentType<
   P & Omit<ComponentProps<C>, 'style'> & { style?: StyleProp<ViewStyle | TextStyle | ImageStyle> }
 >;
@@ -290,15 +295,9 @@ export function defineTokens<T extends TokenConfig>(tokenConfig: T): CreateToken
    * Styled function for creating styled components with token-aware styles
    */
   const styled: StyledFunction = <C extends ComponentType<any>>(Component: C) => {
-    return <P extends object = {}>(styleObject: StyleObject) => {
-      // Resolve tokens in the style object
-      const resolvedStyle = resolveTokens(styleObject, tokens);
-
-      // Create StyleSheet using StyleSheet.create for better performance
-      const styles = StyleSheet.create({
-        style: resolvedStyle as ResolvedStyle,
-      });
-
+    return <P extends object = {}>(
+      styleObject: StyleObject | ((props: P & Omit<ComponentProps<C>, 'style'>) => StyleObject),
+    ) => {
       // Create and return a new component that applies the resolved styles
       const StyledComponent: ComponentType<
         P &
@@ -313,7 +312,21 @@ export function defineTokens<T extends TokenConfig>(tokenConfig: T): CreateToken
         } = props as {
           children?: ReactNode;
           style?: StyleProp<ViewStyle | TextStyle | ImageStyle>;
-        } & Record<string, unknown>;
+        };
+
+        // If styleObject is a function, call it with props to get the style object
+        const styleToResolve =
+          typeof styleObject === 'function'
+            ? styleObject(props as P & Omit<ComponentProps<C>, 'style'>)
+            : styleObject;
+
+        // Resolve tokens in the style object
+        const resolvedStyle = resolveTokens(styleToResolve, tokens);
+
+        // Create StyleSheet for the resolved style
+        const styles = StyleSheet.create({
+          style: resolvedStyle as ResolvedStyle,
+        });
 
         // Merge the StyleSheet style with any style passed in props
         const mergedStyle = propStyle
