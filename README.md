@@ -1,4 +1,4 @@
-## 🌸 Jacaranda
+![Discover Jacaranda](./docs/meta-jacaranda.jpg)
 
 ![NPM Version](https://img.shields.io/npm/v/jacaranda?style=flat)
 ![NPM License](https://img.shields.io/npm/l/jacaranda?style=flat)
@@ -27,7 +27,24 @@ Provides a way to styling components in React Native with better experience and 
 - [x] Styled function to styling component using design tokens.
 - [x] Use `Stylesheet.create` instead a simple objects.
 - [x] Access to `props` from styles defined into `styled` components.
+- [ ] Type-safe registered tokens inside styles.
 - [ ] Default design tokens.
+
+### How to install
+
+Add the package to your project using one of the following:
+
+```sh
+yarn add jacaranda
+```
+
+```sh
+npm install jacaranda
+```
+
+```sh
+npx expo install jacaranda
+```
 
 ### Create your config file
 
@@ -137,6 +154,18 @@ const buttonStyles = sva({
 });
 ```
 
+### TypeScript
+
+#### Extract variants from a component
+
+You can use the `VariantProps` type to extract the variants from a component.
+
+```tsx
+import { type VariantProps } from 'jacaranda';
+
+type ButtonProps = VariantProps<typeof buttonStyles>;
+```
+
 ### Styled Components with Design Tokens
 
 Jacaranda provides a `styled` function similar to `styled-components` that allows you to create styled React Native components with access to your design tokens.
@@ -160,16 +189,12 @@ export const Screen = () => {
 };
 ```
 
-### TypeScript
-
-#### Extract variants from a component
-
-You can use the `VariantProps` type to extract the variants from a component.
+#### Access to `props` for conditional properties:
 
 ```tsx
-import { type VariantProps } from 'jacaranda';
-
-type ButtonProps = VariantProps<typeof buttonStyles>;
+const StyledView = styled(View)((props) => ({
+  backgroundColor: '$colors.primary50',
+}));
 ```
 
 Copyright @ 2025 by Javier Diaz
